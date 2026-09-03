@@ -1,0 +1,141 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+<style>
+     body{
+        background-image: url('http://127.0.0.1:5000/static/feed.jpeg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+    }
+    
+    </style>
+<body>
+    <h3 style="color:white">Cyber Bullying Detection Using LSTM </h3><hr><br>
+<div class="row">
+    <div class="col-4" style="text-align: left;">
+        <form action="/" method="post">
+            <div class="form-group">
+                <input type="text" style="display: none;" value="en" name="lang">
+                <input autocomplete="off" autofocus class="form-control" name="post" placeholder="What's on your mind?" type="text">
+                <br><br><input type="submit" class="btn btn-success" name="submit" value="Post">
+            </div>
+        </form>
+    </div>
+    <div class="col-4" style="text-align: left;">
+        <form action="/detect" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <input autocomplete="off" autofocus class="form-control" name="file" type="file">
+                <br><br><input type="submit" name="submit" class="btn btn-success" value="Post">
+            </div>
+        </form>
+    </div>
+    <div class="col-4" style="text-align: left;">
+        <form action="/" method="post">
+            <div class="form-group">
+                <select name="lang" id="lang" class="form-control" style="width: 100%;">
+                    <option value="en">English</option>
+                    <option value="kn">Kannada</option>
+                    <option value="hi">Hindi</option>
+                </select><br><br>
+                <input autocomplete="off" autofocus class="form-control" style="width: 80%;" name="post" placeholder="What's on your mind?" type="text" id="query">
+                <img onclick="startDictation()" src="data:image/png;base64,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" style="width:40px;cursor: pointer;" />
+                <br><br><input type="submit" class="btn btn-success" name="submit" value="Post">
+            </div>
+        </form>
+    </div>
+    </div>
+    <br /><hr><br />
+    <div class="row">
+    <div class="col-4"></div>
+    <div class="col-4" style="text-align: left; color: rgb(17, 22, 165);">
+        {% if reputation %}
+        <a href="" class="btn btn-info">Reputation Score: {{ reputation }}</a>
+        {% endif %}
+    </div>
+</div>
+    <!-- <div class="col-4" style="text-align: left; color: rgb(17, 22, 165);">
+        <form action="/image" method="post"  enctype="multipart/form-data">
+            <input type="file" name="file" id="file" class="form-control" required>
+            <br>
+            <br><input type="submit" class="btn btn-success">
+        </form>
+    </div> -->
+</div>
+
+{% if posts is defined %}
+    {% for post in posts %}
+    <div class="card border-dark mb-3 text-center" >
+        <div class="card-body text-dark">
+            <div class="row">
+                <div class="col-3" style="text-align: center;">
+                        <img src="{{ posts_metadata[post['publisher']] }}" style="width:50%;" alt="Display Picture"><br />
+                        <strong>{{  post["publisher"] }}</strong>
+                </div>
+                <div class="col-6" style="text-align: left;">
+                    <h5 class="card-title">
+                        {{ post["text"] }}  
+                        {% set sc = post["nature"] | float %}
+
+                        {% if sc > 0.50 %}
+                            <img src="http://127.0.0.1:5000/static/bad.png" style="width: 50px;border-radius: 50%;"> Negative
+                        {% elif sc > 0.30 and sc < 0.50 %}
+                            <img src="http://127.0.0.1:5000/static/mid.png" style="width: 50px;border-radius: 50%;"> Neutral
+                        {% else %}
+                            <img src="http://127.0.0.1:5000/static/good.png" style="width: 50px;border-radius: 50%;"> Positive
+                        {% endif %}
+
+                    </h5>
+                    <p class="card-text"><em>{{ sc }}</em></p>
+                    <p class="card-text"><em>{{ post["timestamp"] }}</em></p>
+                    <i onclick="myFunction(this)" class="fa fa-thumbs-up"></i>
+                </div>
+                <div class="col-3" style="text-align: center;">
+                    {% if post['image'] %}
+                    <img src="http://127.0.0.1:5000/{{ post['image'] }}" style="width:50%;;border:1px solid black" alt="Display Picture"><br />
+                    {% endif %}
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <br />
+    {% endfor %}
+{% endif %}
+<script>
+    function myFunction(x) {
+        x.classList.toggle("fa-thumbs-down");
+    }
+</script>
+<script>
+    if('{{msg}}'){
+        alert('{{msg}}')
+    }
+</script>
+
+<script>
+    function startDictation() {
+        if (window.hasOwnProperty('webkitSpeechRecognition')) {
+            var recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = document.getElementById('lang').value;
+            recognition.start();
+            recognition.onresult = function (e) {
+                document.getElementById('query').value = e.results[0][0].transcript;
+                recognition.stop();
+                document.getElementById('query').focus();
+            };
+            recognition.onerror = function (e) {
+                recognition.stop();
+            }
+        }
+    }
+</script>
+
+</body>
+{% endblock %}
