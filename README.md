@@ -108,8 +108,6 @@ The project combines two approaches for text classification: LSTM captures seque
 **Why use OCR for uploaded images?**
 The current application does not perform direct image-content classification. Tesseract OCR extracts text from an uploaded image, and that extracted text is passed through the existing LSTM + CNN text-classification pipeline.
 
-See [docs/DECISIONS.md](docs/DECISIONS.md) for the full architecture decision log.
-
 ## What I struggled with
 
 - Integrating the TensorFlow/Keras model with Flask while keeping model loading and inference consistent.
